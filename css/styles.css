@@ -11004,11 +11004,6 @@ html {
   overflow: hidden;
  　height: 250px;
   object-fit: cover;  
-/* さっきのコードの } のすぐ下（274行目あたり）にこれを貼り付けます */
-.portfolio .portfolio-item img {
-  width: 100%;
-  height: 180px;        /* ★ここを「正常な画像の高さ」に合わせて調整します */
-  object-fit: cover;    /* 画像を歪ませずに枠に収める魔法のコードです */
 }
 .portfolio .portfolio-item .portfolio-item-caption {
   position: absolute;
