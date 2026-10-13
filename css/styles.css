@@ -11004,7 +11004,10 @@ html {
   overflow: hidden;
  　height: 250px;
   object-fit: cover;  
-}
+.portfolio .portfolio-item img {
+  width: 100% !important;
+  height: 250px !important;    /* 左右の正常な画像の高さに合わせる */
+  object-fit: cover !important; /* 強制的に縦潰れを直す */}
 .portfolio .portfolio-item .portfolio-item-caption {
   position: absolute;
   top: 0;
