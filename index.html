@@ -150,38 +150,35 @@ F<!DOCTYPE html>
                             </div>
                             <!-- Phone number input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
+                                <!-- ※ idを phone に統合しました -->
+                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
                                 <label for="phone">電話番号(Phone number)</label>
-                                <div class="invalid-feedback" data-sb-feedback="phone:required">電話番号を入力してください(A phone number is required.)</div>
+                                <div class="invalid-feedback">電話番号を入力してください(A phone number is required.)</div>
                             </div>
                             <!-- Message input-->
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
+                                <textarea class="form-control" id="message" placeholder="Enter your message here..." style="height: 10rem" required></textarea>
                                 <label for="message">問い合わせ内容(Message)</label>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">メッセージを入力してください(A message is required.)</div>
+                                <div class="invalid-feedback">メッセージを入力してください(A message is required.)</div>
                             </div>
+                            
                             <!-- Submit success message-->
-                            <!---->
-                            <!-- This is what your users will see when the form-->
-                            <!-- has successfully submitted-->
-<!-- button type="submit" id="submitBtn">送信(Send)</button　-->
-<!--     <div class="d-none" id="submitBtn"> -->
-     <!-- div class="d-none" id="submitSuccessMessage" -->
-     <div class="d-none" id="submitBtn">
+                            <!-- 送信成功時に表示するエリア (d-noneを外してコントロールします) -->
+                            <div class="d-none" id="submitSuccessMessage">
                                 <div class="text-center mb-3">
-                                    <div class="fw-bolder">フォームの送信が完了しました！(Form submission successful!)</div>
-                                    To activate this form, sign up at
-                                    <br />
-                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                    <div class="fw-bolder text-success">フォームの送信が完了しました！(Form submission successful!)</div>
                                 </div>
                             </div>
+                            
                             <!-- Submit error message-->
-                            <!---->
-                            <!-- This is what your users will see when there is-->
-                            <!-- an error submitting the form-->
-                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                            <!-- 送信エラー時に表示するエリア -->
+                            <div class="d-none" id="submitErrorMessage">
+                                <div class="text-center text-danger mb-3">Error sending message!</div>
+                            </div>
+                            
                             <!-- Submit Button-->
-                            <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">送信(Send)</button>
+                            <!-- ※ ロックの原因だった "disabled" クラスを削除しました -->
+                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">送信(Send)</button>
                         </form>
                     </div>
                 </div>
@@ -317,51 +314,63 @@ F<!DOCTYPE html>
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-<script>
-    // ★前回のステップ2でコピーしたGASのウェブアプリURLをここに貼り付けてください
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyw0DSfXAHhRGTKpBo9n0OwxpuYGJCvZ-vE7JK7BluXlDFpXXfjY0CqNXsc20-264E21A/exec";
 
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // 画面遷移をブロック
+        <!-- ★ここから下にGAS送信用のJavaScriptコードを追記してください -->
+        <script>
+            // 1. あなたのGASのウェブアプリURLをここに貼り付けてください
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbyw0DSfXAHhRGTKpBo9n0OwxpuYGJCvZ-vE7JK7BluXlDFpXXfjY0CqNXsc20-264E21A/exec";
 
-        const submitBtn = document.getElementById('submitBtn');
-        const formMessage = document.getElementById('formMessage');
+            // 2. フォームの送信イベントを監視（もし上のコードより上部でformタグが定義されている場合、そのformに id="contactForm" がついているか確認してください）
+            // もしformタグのidが別名の場合は、下の 'contactForm' をそのidに書き換えてください。
+            const contactForm = document.getElementById('contactForm') || document.querySelector('form');
 
-        // 連打・連続送信防止
-        submitBtn.disabled = true;
-        formMessage.style.color = "white"; // 背景が濃い青なので文字色を白に（適宜調整してください）
-        formMessage.innerText = "送信中...";
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // ページ遷移を防止
 
-        // 送信データの作成（電話番号を追加）
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            tel: document.getElementById('tel').value, // ★追加
-            message: document.getElementById('message').value
-        };
+                const submitButton = document.getElementById('submitButton');
+                const successMessage = document.getElementById('submitSuccessMessage');
+                const errorMessage = document.getElementById('submitErrorMessage');
 
-        // GASへデータを非同期送信
-        fetch(GAS_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(() => {
-            formMessage.style.color = "#28a745"; // 成功時は緑色の文字に
-            formMessage.innerText = "お問い合わせが送信されました。ありがとうございました！";
-            document.getElementById('contactForm').reset(); // フォームをクリア
-            submitBtn.disabled = false;
-        })
-        .catch(error => {
-            formMessage.style.color = "#dc3545"; // エラー時は赤色の文字に
-            formMessage.innerText = "エラーが発生しました。時間をおいて再度お試しください。";
-            submitBtn.disabled = false;
-            console.error("Error:", error);
-        });
-    });
-</script>
+                // 送信中の状態を作る（ボタンを無効化して文字を変える）
+                submitButton.disabled = true;
+                submitButton.innerText = "送信中...(Sending...)";
+                successMessage.classList.add('d-none');
+                errorMessage.classList.add('d-none');
+
+                // 送信するデータを収集
+                // ※ もし「お名前」や「メールアドレス」のinputタグが上のコードより高い位置にある場合、
+                // それらのタグに id="name" と id="email" が設定されているか確認してください。
+                const formData = {
+                    name: document.getElementById('name') ? document.getElementById('name').value : "名前項目なし",
+                    email: document.getElementById('email') ? document.getElementById('email').value : "メール項目なし",
+                    tel: document.getElementById('phone').value,
+                    message: document.getElementById('message').value
+                };
+
+                // GASへデータを非同期送信（Fetch API）
+                fetch(GAS_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(() => {
+                    // 送信成功時の処理
+                    successMessage.classList.remove('d-none'); // 成功メッセージを表示
+                    contactForm.reset();                       // 入力欄をクリア
+                    submitButton.disabled = false;
+                    submitButton.innerText = "送信(Send)";
+                })
+                .catch(error => {
+                    // 送信エラー時の処理
+                    errorMessage.classList.remove('d-none');   // エラーメッセージを表示
+                    submitButton.disabled = false;
+                    submitButton.innerText = "送信(Send)";
+                    console.error("Error:", error);
+                });
+            });
+        </script>
     </body>
 </html>
