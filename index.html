@@ -313,6 +313,52 @@ F<!DOCTYPE html>
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+<script>
+    // ★前回のステップ2でコピーしたGASのウェブアプリURLをここに貼り付けてください
+    const GAS_URL = "ここにGASのウェブアプリURLを貼り付け";
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // 画面遷移をブロック
+
+        const submitBtn = document.getElementById('submitBtn');
+        const formMessage = document.getElementById('formMessage');
+
+        // 連打・連続送信防止
+        submitBtn.disabled = true;
+        formMessage.style.color = "white"; // 背景が濃い青なので文字色を白に（適宜調整してください）
+        formMessage.innerText = "送信中...";
+
+        // 送信データの作成（電話番号を追加）
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            tel: document.getElementById('tel').value, // ★追加
+            message: document.getElementById('message').value
+        };
+
+        // GASへデータを非同期送信
+        fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(() => {
+            formMessage.style.color = "#28a745"; // 成功時は緑色の文字に
+            formMessage.innerText = "お問い合わせが送信されました。ありがとうございました！";
+            document.getElementById('contactForm').reset(); // フォームをクリア
+            submitBtn.disabled = false;
+        })
+        .catch(error => {
+            formMessage.style.color = "#dc3545"; // エラー時は赤色の文字に
+            formMessage.innerText = "エラーが発生しました。時間をおいて再度お試しください。";
+            submitBtn.disabled = false;
+            console.error("Error:", error);
+        });
+    });
+</script>
     </body>
 </html>
 <!DOCTYPE html>
