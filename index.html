@@ -133,7 +133,8 @@ F<!DOCTYPE html>
                         <!-- To make this form functional, sign up at-->
                         <!-- https://startbootstrap.com/solution/contact-forms-->
                         <!-- to get an API token!-->
-                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+ <form id="contactForm">
+<!--                       <form id="contactForm" data-sb-form-api-token="API_TOKEN"> -->
                             <!-- Name input-->
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="name" type="text" placeholder="Enter your name(名前を入力してください)..." data-sb-validations="required" />
@@ -165,7 +166,7 @@ F<!DOCTYPE html>
                             <!-- has successfully submitted-->
                             <div class="d-none" id="submitSuccessMessage">
                                 <div class="text-center mb-3">
-                                    <div class="fw-bolder">Form submission successful!</div>
+                                    <div class="fw-bolder">フォームの送信が完了しました！(Form submission successful!)</div>
                                     To activate this form, sign up at
                                     <br />
                                     <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
@@ -258,7 +259,7 @@ F<!DOCTYPE html>
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/Burton_3.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/BURTON_3.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-4">BURTON Race Physics用代替えパーツ販売,補修,カスタマイズ(予定)をしています．<BR>「リリースワイヤー販売(2本セット10,000円)」<BR>純正品よりも細いステンレスワイヤーを使用しアウターケーブルもステンレス製を使用していいるため,しなりと耐久性があります．ハンドル側はロウ付けではないので多少の長さ調整が可能です．<BR>「特殊形状のTナット代用品販売(4本セット6,000円)」<BR>純正のアルミ製Tナットに代わるステンレス製の代用品になります．ベースプレートとの電食対策済みです．<BR>「ヒールブロック内部の金属パーツ補修」<BR>長期使用によるヒールブロック内の金属パーツ摩耗によるガタつきを補修します．<BR>「DeeluxeTrack700のスピードフック取付け加工(準備中です)」<BR>Burtonの専用ブーツにしか取り付けできなかったスピードフックをDeeluxeTrack700に加工を施し取り付けます(準備中)<BR></p>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
@@ -315,7 +316,7 @@ F<!DOCTYPE html>
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 <script>
     // ★前回のステップ2でコピーしたGASのウェブアプリURLをここに貼り付けてください
-    const GAS_URL = "ここにGASのウェブアプリURLを貼り付け";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyw0DSfXAHhRGTKpBo9n0OwxpuYGJCvZ-vE7JK7BluXlDFpXXfjY0CqNXsc20-264E21A/exec";
 
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault(); // 画面遷移をブロック
@@ -360,91 +361,4 @@ F<!DOCTYPE html>
     });
 </script>
     </body>
-</html>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>お問い合わせフォーム</title>
-    <style>
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; }
-        #formMessage { margin-top: 15px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <h2>お問い合わせフォーム (GAS連携)</h2>
-    
-    <!-- JavaScriptで処理するため、actionやmethodは不要です -->
-    <form id="contactForm">
-        <div class="form-group">
-            <label for="name">お名前：</label>
-            <input type="text" id="name" required>
-        </div>
-
-        <div class="form-group">
-            <label for="email">メールアドレス：</label>
-            <input type="email" id="email" required>
-        </div>
-
-        <div class="form-group">
-            <label for="message">お問い合わせ内容：</label>
-            <textarea id="message" rows="5" required></textarea>
-        </div>
-
-        <button type="submit" id="submitBtn">送信する</button>
-    </form>
-
-    <!-- 送信ステータスを表示するエリア -->
-    <div id="formMessage"></div>
-
-    <script>
-        // ★ステップ2でコピーしたGASのウェブアプリURLをここに貼り付けてください
-        const GAS_URL = "ここにGASのウェブアプリURLを貼り付け";
-
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // 画面遷移をブロック
-
-            const submitBtn = document.getElementById('submitBtn');
-            const formMessage = document.getElementById('formMessage');
-
-            // 連打・連続送信防止
-            submitBtn.disabled = true;
-            formMessage.style.color = "black";
-            formMessage.innerText = "送信中...";
-
-            // 送信データの作成
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                message: document.getElementById('message').value
-            };
-
-            // GASへデータを非同期送信（Fetch API）
-            fetch(GAS_URL, {
-                method: "POST",
-                mode: "no-cors", // CORSエラーを回避するための設定
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(() => {
-                // mode: 'no-cors' の場合、中身の成否に関わらず通信が届けばここを通ります
-                formMessage.style.color = "green";
-                formMessage.innerText = "お問い合わせが送信されました。ありがとうございました！";
-                document.getElementById('contactForm').reset(); // フォームをクリア
-                submitBtn.disabled = false;
-            })
-            .catch(error => {
-                formMessage.style.color = "red";
-                formMessage.innerText = "エラーが発生しました。時間をおいて再度お試しください。";
-                submitBtn.disabled = false;
-                console.error("Error:", error);
-            });
-        });
-    </script>
-
-</body>
 </html>
